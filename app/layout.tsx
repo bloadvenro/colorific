@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import { Baloo_2, Nunito } from 'next/font/google';
-import { MantineProvider } from '@mantine/core';
 import '@mantine/core/styles.css';
 import './globals.css';
+import { Providers } from './providers';
 
 const baloo = Baloo_2({
   variable: '--font-baloo',
@@ -27,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${baloo.variable} ${nunito.variable}`}>
-        <MantineProvider>{children}</MantineProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

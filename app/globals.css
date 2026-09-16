@@ -409,6 +409,17 @@ h1 {
   }
 }
 
+@media (max-width: 1200px) {
+  .stage {
+    left: 34%;
+    width: min(60vw, 620px);
+  }
+
+  h1 {
+    font-size: clamp(3.5rem, 6vw, 4.7rem);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
