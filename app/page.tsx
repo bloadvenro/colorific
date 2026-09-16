@@ -3,7 +3,7 @@
 import { Button, ColorPicker, Tooltip } from '@mantine/core';
 import { Moon, RotateCcw, Sun } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { darkenForNight, mixColors } from '../lib/color';
+import { darkenForNight, mixPaintColors } from '../lib/color';
 
 const SWATCHES = [
   '#ff4d6d',
@@ -14,8 +14,6 @@ const SWATCHES = [
   '#635bff',
   '#bd5cff',
 ];
-
-const DROP_COLOR_WEIGHT = 0.75;
 
 const copy = {
   en: {
@@ -31,7 +29,7 @@ const copy = {
     canvas: 'YOUR CANVAS',
     reset: 'Start over',
     resetHint: 'Start over with white',
-    note: 'Each new drop pulls your canvas closer to the picked color.',
+    note: 'Drops mix like paint—try yellow and blue!',
     day: 'Use day mode',
     night: 'Use night mode',
     english: 'Switch to English',
@@ -54,7 +52,7 @@ const copy = {
     canvas: 'ТВОЙ ХОЛСТ',
     reset: 'Начать заново',
     resetHint: 'Начать заново с белого цвета',
-    note: 'Каждая капля приближает холст к выбранному цвету.',
+    note: 'Капли смешиваются как краски — попробуй жёлтый и синий!',
     day: 'Включить дневной режим',
     night: 'Включить ночной режим',
     english: 'Переключить на английский',
@@ -161,7 +159,7 @@ export default function Home() {
       void dropSound.play().catch(() => undefined);
     }
     setBackgroundColor((current) =>
-      mixColors(current, dropColor, DROP_COLOR_WEIGHT),
+      mixPaintColors(current, dropColor, 1 / (mixCount + 1)),
     );
     setMixCount((count) => count + 1);
   };
