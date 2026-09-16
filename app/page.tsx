@@ -15,6 +15,8 @@ const SWATCHES = [
   '#bd5cff',
 ];
 
+const DROP_COLOR_WEIGHT = 0.75;
+
 const copy = {
   en: {
     chooseColor: 'Choose a color',
@@ -29,7 +31,7 @@ const copy = {
     canvas: 'YOUR CANVAS',
     reset: 'Start over',
     resetHint: 'Start over with white',
-    note: 'Every new drop blends 50/50 with your canvas.',
+    note: 'Each new drop pulls your canvas closer to the picked color.',
     day: 'Use day mode',
     night: 'Use night mode',
     english: 'Switch to English',
@@ -52,7 +54,7 @@ const copy = {
     canvas: 'ТВОЙ ХОЛСТ',
     reset: 'Начать заново',
     resetHint: 'Начать заново с белого цвета',
-    note: 'Каждая новая капля смешивается с холстом 50/50.',
+    note: 'Каждая капля приближает холст к выбранному цвету.',
     day: 'Включить дневной режим',
     night: 'Включить ночной режим',
     english: 'Переключить на английский',
@@ -158,7 +160,9 @@ export default function Home() {
       dropSound.currentTime = 0;
       void dropSound.play().catch(() => undefined);
     }
-    setBackgroundColor((current) => mixColors(current, dropColor));
+    setBackgroundColor((current) =>
+      mixColors(current, dropColor, DROP_COLOR_WEIGHT),
+    );
     setMixCount((count) => count + 1);
   };
 
