@@ -2,7 +2,7 @@
 
 import { Button, ColorPicker, Tooltip } from '@mantine/core';
 import { Moon, RotateCcw, Sun } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { darkenForNight, mixColors } from '../lib/color';
 
 const SWATCHES = [
@@ -130,8 +130,9 @@ export default function Home() {
   const [dropKey, setDropKey] = useState(0);
   const [mixCount, setMixCount] = useState(0);
   const [isDropping, setIsDropping] = useState(false);
-  const [language, setLanguage] = useState<Language>('en');
+  const [language, setLanguage] = useState<Language>('ru');
   const [theme, setTheme] = useState<Theme>('day');
+  const dropSoundRef = useRef<HTMLAudioElement>(null);
 
   const text = copy[language];
   const displayedColor = useMemo(
@@ -152,6 +153,11 @@ export default function Home() {
   };
 
   const applyDrop = () => {
+    const dropSound = dropSoundRef.current;
+    if (dropSound) {
+      dropSound.currentTime = 0;
+      void dropSound.play().catch(() => undefined);
+    }
     setBackgroundColor((current) => mixColors(current, dropColor));
     setMixCount((count) => count + 1);
   };
@@ -308,6 +314,9 @@ export default function Home() {
       </Tooltip>
 
       <p className="mix-note">{text.note}</p>
+      <audio ref={dropSoundRef} src="/waterdrop.mp3" preload="auto">
+        <track kind="captions" src="/waterdrop.vtt" srcLang="zxx" />
+      </audio>
     </main>
   );
 }

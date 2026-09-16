@@ -112,8 +112,8 @@ input {
 
 .toolbar {
   position: absolute;
-  top: 108px;
-  left: 52px;
+  top: 46px;
+  right: 400px;
   z-index: 6;
   display: flex;
   gap: 10px;
