@@ -5,6 +5,11 @@
 :root {
   --ink: #17233f;
   --yellow: #ffd23f;
+  --panel: #ffffff;
+  --panel-glass: rgba(255, 255, 255, 0.94);
+  --result-glass: rgba(255, 255, 255, 0.8);
+  --frame: rgba(23, 35, 63, 0.12);
+  --shadow: #17233f;
   --background: #ffffff;
   --foreground: #17233f;
   --card: #ffffff;
@@ -55,13 +60,25 @@ input {
   min-width: 960px;
   min-height: 650px;
   overflow: hidden;
-  transition: background-color 1s cubic-bezier(0.22, 1, 0.36, 1);
+  color: var(--ink);
+  transition:
+    background-color 1s cubic-bezier(0.22, 1, 0.36, 1),
+    color 300ms ease;
+}
+
+.playground[data-theme='night'] {
+  --ink: #f4f7ff;
+  --panel: #17213e;
+  --panel-glass: rgba(23, 33, 62, 0.94);
+  --result-glass: rgba(23, 33, 62, 0.82);
+  --frame: rgba(244, 247, 255, 0.2);
+  --shadow: #070c1b;
 }
 
 .playground::before {
   position: absolute;
   inset: 18px;
-  border: 3px solid rgba(23, 35, 63, 0.12);
+  border: 3px solid var(--frame);
   border-radius: 32px;
   content: '';
   pointer-events: none;
@@ -89,8 +106,54 @@ input {
   border: 3px solid var(--ink);
   border-radius: 50% 50% 50% 12px;
   background: var(--yellow);
-  box-shadow: 4px 4px 0 var(--ink);
+  box-shadow: 4px 4px 0 var(--shadow);
   transform: rotate(-10deg);
+}
+
+.toolbar {
+  position: absolute;
+  top: 108px;
+  left: 52px;
+  z-index: 6;
+  display: flex;
+  gap: 10px;
+}
+
+.icon-switch {
+  display: flex;
+  gap: 3px;
+  padding: 4px;
+  border: 3px solid var(--ink);
+  border-radius: 999px;
+  background: var(--panel-glass);
+  box-shadow: 4px 4px 0 var(--shadow);
+  transition:
+    background-color 300ms ease,
+    border-color 300ms ease;
+}
+
+.icon-switch button {
+  display: grid;
+  width: 38px;
+  height: 34px;
+  place-items: center;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.icon-switch button[aria-pressed='true'] {
+  background: var(--yellow);
+  color: #17233f;
+}
+
+.icon-switch button:focus-visible {
+  outline: 4px solid rgba(99, 91, 255, 0.55);
+  outline-offset: 2px;
 }
 
 .picker-panel {
@@ -102,9 +165,12 @@ input {
   padding: 22px 22px 18px;
   border: 3px solid var(--ink);
   border-radius: 28px;
-  background: rgba(255, 255, 255, 0.94);
-  box-shadow: 8px 8px 0 var(--ink);
+  background: var(--panel-glass);
+  box-shadow: 8px 8px 0 var(--shadow);
   backdrop-filter: blur(12px);
+  transition:
+    background-color 300ms ease,
+    border-color 300ms ease;
 }
 
 .picker-heading {
@@ -136,7 +202,7 @@ input {
   height: 43px;
   border: 3px solid var(--ink);
   border-radius: 50%;
-  box-shadow: 3px 3px 0 var(--ink);
+  box-shadow: 3px 3px 0 var(--shadow);
 }
 
 .color-picker [data-color-picker-saturation] {
@@ -220,6 +286,10 @@ h1 {
   transform: translateX(-50%) translateY(8px) scale(0.96);
 }
 
+.pipette-button:disabled {
+  cursor: wait;
+}
+
 .pipette-button:focus-visible {
   border-radius: 24px;
   outline: 5px solid rgba(99, 91, 255, 0.5);
@@ -232,7 +302,7 @@ h1 {
   border: 3px solid var(--ink);
   border-radius: 999px;
   background: var(--yellow);
-  box-shadow: 3px 3px 0 var(--ink);
+  box-shadow: 3px 3px 0 var(--shadow);
   font-size: 0.78rem;
   font-weight: 950;
   letter-spacing: 0.08em;
@@ -241,7 +311,9 @@ h1 {
 .pipette {
   width: 154px;
   height: 178px;
-  filter: drop-shadow(8px 11px 0 rgba(23, 35, 63, 0.12));
+  filter: drop-shadow(
+    8px 11px 0 color-mix(in srgb, var(--shadow), transparent 45%)
+  );
 }
 
 .splash-zone {
@@ -347,10 +419,13 @@ h1 {
   padding: 10px 18px 10px 11px;
   border: 3px solid var(--ink);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.8);
-  box-shadow: 4px 4px 0 var(--ink);
+  background: var(--result-glass);
+  box-shadow: 4px 4px 0 var(--shadow);
   text-align: left;
   backdrop-filter: blur(8px);
+  transition:
+    background-color 300ms ease,
+    border-color 300ms ease;
 }
 
 .result-card div {
@@ -385,9 +460,14 @@ h1 {
   bottom: 46px;
   height: 48px !important;
   border: 3px solid var(--ink) !important;
-  box-shadow: 4px 4px 0 var(--ink) !important;
+  background: var(--panel) !important;
+  box-shadow: 4px 4px 0 var(--shadow) !important;
   color: var(--ink) !important;
   font-weight: 900 !important;
+}
+
+.playground[data-language='ru'] h1 {
+  font-size: clamp(3.2rem, 5.2vw, 5.6rem);
 }
 
 .mix-note {
@@ -417,6 +497,10 @@ h1 {
 
   h1 {
     font-size: clamp(3.5rem, 6vw, 4.7rem);
+  }
+
+  .playground[data-language='ru'] h1 {
+    font-size: clamp(3rem, 4.7vw, 4rem);
   }
 }
 
