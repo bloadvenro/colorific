@@ -54,6 +54,7 @@ input {
 }
 
 .playground {
+  --canvas-foreground: #000000;
   position: relative;
   width: 100vw;
   height: 100vh;
@@ -61,10 +62,8 @@ input {
   min-width: 960px;
   min-height: 650px;
   overflow: hidden;
-  color: var(--ink);
-  transition:
-    background-color 1s cubic-bezier(0.22, 1, 0.36, 1),
-    color 300ms ease;
+  color: var(--canvas-foreground);
+  transition: background-color 1s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .playground[data-theme='night'] {
@@ -104,10 +103,11 @@ input {
   width: 46px;
   height: 46px;
   place-items: center;
-  border: 3px solid var(--ink);
+  border: 3px solid #17233f;
   border-radius: 50% 50% 50% 12px;
   background: var(--yellow);
   box-shadow: 4px 4px 0 var(--shadow);
+  color: #17233f;
   transform: rotate(-10deg);
 }
 
@@ -169,6 +169,7 @@ input {
   background: var(--panel-glass);
   box-shadow: 8px 8px 0 var(--shadow);
   backdrop-filter: blur(12px);
+  color: var(--ink);
   transition:
     background-color 300ms ease,
     border-color 300ms ease;
@@ -206,19 +207,19 @@ input {
   box-shadow: 3px 3px 0 var(--shadow);
 }
 
-.color-picker [data-color-picker-saturation] {
+.color-picker .mantine-ColorPicker-saturation {
   border: 2px solid var(--ink);
   border-radius: 16px;
 }
 
-.color-picker [data-color-picker-hue] {
+.color-picker .mantine-ColorPicker-hue {
   height: 15px;
   margin-top: 13px;
   border: 2px solid var(--ink);
   border-radius: 999px;
 }
 
-.color-picker [data-color-picker-swatch] {
+.color-picker .mantine-ColorPicker-swatch {
   width: 27px;
   height: 27px;
   margin-top: 10px;
@@ -300,10 +301,11 @@ h1 {
 .pipette-button span {
   margin-top: -20px;
   padding: 7px 15px;
-  border: 3px solid var(--ink);
+  border: 3px solid #17233f;
   border-radius: 999px;
   background: var(--yellow);
   box-shadow: 3px 3px 0 var(--shadow);
+  color: #17233f;
   font-size: 0.78rem;
   font-weight: 950;
   letter-spacing: 0.08em;
@@ -422,6 +424,7 @@ h1 {
   border-radius: 999px;
   background: var(--result-glass);
   box-shadow: 4px 4px 0 var(--shadow);
+  color: var(--ink);
   text-align: left;
   backdrop-filter: blur(8px);
   transition:
@@ -594,18 +597,18 @@ h1 {
     border-width: 2px;
   }
 
-  .color-picker [data-color-picker-saturation] {
+  .color-picker .mantine-ColorPicker-saturation {
     height: clamp(82px, 14svh, 118px);
     border-width: 2px;
     border-radius: 13px;
   }
 
-  .color-picker [data-color-picker-hue] {
+  .color-picker .mantine-ColorPicker-hue {
     height: 14px;
     margin-top: 9px;
   }
 
-  .color-picker [data-color-picker-swatch] {
+  .color-picker .mantine-ColorPicker-swatch {
     width: 32px;
     height: 32px;
     margin-top: 7px;
@@ -758,7 +761,7 @@ h1 {
     margin-bottom: 8px;
   }
 
-  .color-picker [data-color-picker-saturation] {
+  .color-picker .mantine-ColorPicker-saturation {
     height: 92px;
   }
 

@@ -2,8 +2,8 @@
 
 import { Button, ColorPicker, Tooltip } from '@mantine/core';
 import { Moon, RotateCcw, Sun } from 'lucide-react';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { darkenForNight, mixPaintColors } from '../lib/color';
+import { useEffect, useRef, useState } from 'react';
+import { getContrastForeground, mixPaintColors } from '../lib/color';
 
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
 
@@ -134,18 +134,36 @@ export default function Home() {
   const [isDropping, setIsDropping] = useState(false);
   const [language, setLanguage] = useState<Language>('ru');
   const [theme, setTheme] = useState<Theme>('day');
+  const canvasRef = useRef<HTMLElement>(null);
   const dropSoundRef = useRef<HTMLAudioElement>(null);
 
   const text = copy[language];
-  const displayedColor = useMemo(
-    () =>
-      theme === 'night' ? darkenForNight(backgroundColor) : backgroundColor,
-    [backgroundColor, theme],
-  );
 
   useEffect(() => {
     document.documentElement.lang = language;
   }, [language]);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    let animationFrame = 0;
+    const stopAt = performance.now() + 1_100;
+    const syncForeground = () => {
+      const renderedBackground = getComputedStyle(canvas).backgroundColor;
+      canvas.style.setProperty(
+        '--canvas-foreground',
+        getContrastForeground(renderedBackground),
+      );
+
+      if (performance.now() < stopAt) {
+        animationFrame = requestAnimationFrame(syncForeground);
+      }
+    };
+
+    syncForeground();
+    return () => cancelAnimationFrame(animationFrame);
+  }, [backgroundColor]);
 
   const startDrop = () => {
     if (isDropping) return;
@@ -174,11 +192,13 @@ export default function Home() {
 
   return (
     <main
+      ref={canvasRef}
       className="playground"
+      data-testid="canvas"
       data-language={language}
       data-theme={theme}
       lang={language}
-      style={{ backgroundColor: displayedColor }}
+      style={{ backgroundColor }}
     >
       <header className="brand" aria-label="Colorific">
         <span className="brand-mark" aria-hidden="true">
@@ -209,6 +229,7 @@ export default function Home() {
         <div className="icon-switch" aria-label={text.theme}>
           <button
             type="button"
+            data-testid="day-theme"
             aria-label={text.day}
             aria-pressed={theme === 'day'}
             onClick={() => setTheme('day')}
@@ -217,6 +238,7 @@ export default function Home() {
           </button>
           <button
             type="button"
+            data-testid="night-theme"
             aria-label={text.night}
             aria-pressed={theme === 'night'}
             onClick={() => setTheme('night')}
@@ -226,7 +248,11 @@ export default function Home() {
         </div>
       </nav>
 
-      <section className="picker-panel" aria-label={text.chooseColor}>
+      <section
+        className="picker-panel"
+        data-testid="picker-panel"
+        aria-label={text.chooseColor}
+      >
         <div className="picker-heading">
           <div>
             <span className="step-label">{text.pickerStep}</span>
@@ -259,6 +285,7 @@ export default function Home() {
           <button
             className="pipette-button"
             type="button"
+            data-testid="drop-button"
             disabled={isDropping}
             onClick={startDrop}
             aria-label={text.addDrop(pickedColor)}
@@ -285,20 +312,27 @@ export default function Home() {
             )}
             <span
               className="target-dot"
-              style={{ background: displayedColor }}
+              data-testid="target-dot"
+              style={{ background: backgroundColor }}
             />
           </div>
         </div>
 
         <div className="result-card" aria-live="polite">
-          <span className="result-dot" style={{ background: displayedColor }} />
+          <span
+            className="result-dot"
+            data-testid="result-dot"
+            style={{ background: backgroundColor }}
+          />
           <div>
             <small>
               {mixCount === 0
                 ? text.canvas
                 : mixedDropLabel(mixCount, language)}
             </small>
-            <strong>{displayedColor.toUpperCase()}</strong>
+            <strong data-testid="result-hex">
+              {backgroundColor.toUpperCase()}
+            </strong>
           </div>
         </div>
       </section>
